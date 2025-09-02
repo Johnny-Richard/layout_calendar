@@ -40,21 +40,10 @@ body {
   width: calc(#{$day-size-total} + #{$gap-total} + #{$padding-total});
   padding: $padding;
 
-  // Ajuste do primeiro dia conforme o início da semana
-  @each $day,
-    $offset
-      in (
-        mon: 0,
-        tue: 101px,
-        wed: 202px,
-        thu: 303px,
-        fri: 404px,
-        sat: 505px,
-        sun: 606px
-      )
-  {
+  // Ajuste do primeiro dia conforme o início da semana, calculado dinamicamente
+  @each $index, $day in (0 mon, 1 tue, 2 wed, 3 thu, 4 fri, 5 sat, 6 sun) {
     &--start-day-#{$day} .calendar__day:first-child {
-      margin-left: $offset;
+      margin-left: ($day-size + $day-gap) * $index;
     }
   }
 
@@ -74,7 +63,9 @@ body {
     height: $day-size;
     background-color: $day-color;
     border: 1px solid $border-color;
-    transition-duration: 0.5s;
+    transition:
+      background-color 0.5s,
+      transform 0.5s;
 
     // Número do dia via pseudo-elemento
     @for $i from 1 through 31 {
@@ -87,7 +78,9 @@ body {
       cursor: pointer;
       background-color: $hover-color;
       transform: translateY($hover-move);
-      transition-duration: 0.5s;
+      transition:
+        background-color 0.5s,
+        transform 0.5s;
     }
   }
 }
